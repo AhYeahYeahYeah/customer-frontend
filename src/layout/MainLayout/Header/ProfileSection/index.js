@@ -45,7 +45,7 @@ const ProfileSection = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
-    const admin = JSON.parse(localStorage.getItem('admin'));
+    const [customer, setCustomer] = useState({});
     const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState('');
     const [notification, setNotification] = useState(false);
@@ -84,7 +84,10 @@ const ProfileSection = () => {
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
-
+        if (JSON.parse(localStorage.getItem('customer')) === null) {
+            window.location.href = '/';
+        }
+        setCustomer(JSON.parse(localStorage.getItem('customer')));
         prevOpen.current = open;
     }, [open]);
 
@@ -112,7 +115,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={admin.avatar}
+                        src={customer.avatar}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -160,7 +163,7 @@ const ProfileSection = () => {
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography variant="h4">Good Morning,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    {admin.aname}
+                                                    {customer.cname}
                                                 </Typography>
                                             </Stack>
                                             <Typography variant="subtitle2">Project Admin</Typography>

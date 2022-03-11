@@ -120,30 +120,30 @@ const FirebaseRegister = ({ ...others }) => {
                 initialValues={{
                     account: '',
                     nickName: '',
-                    aname: '',
+                    cname: '',
                     password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
                     account: Yup.string().max(255).required('Account is required'),
                     nickName: Yup.string().max(255).required('NickName is required'),
-                    aname: Yup.string().max(255).required('Name is required'),
+                    cname: Yup.string().max(255).required('Name is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         if (scriptedRef.current) {
                             const authapi = new AuthApi();
-                            const admin = {
+                            const customer = {
                                 account: values.account,
                                 nickName: values.nickName,
-                                aname: values.aname,
+                                cname: values.cname,
                                 password: sha1(values.password),
                                 avatar: base64
                             };
-                            console.log(admin);
-                            authapi.adminRegister(admin).then((res) => {
-                                console.log(res);
+                            // console.log(customer);
+                            authapi.customerRegister(customer).then((res) => {
+                                // console.log(res);
                                 if (res.status === 200) {
                                     window.location.href = '/login';
                                     setStatus({ success: true });
@@ -201,20 +201,20 @@ const FirebaseRegister = ({ ...others }) => {
                                 </FormHelperText>
                             )}
                         </FormControl>
-                        <FormControl fullWidth error={Boolean(touched.aname && errors.aname)} sx={{ ...theme.typography.customInput }}>
+                        <FormControl fullWidth error={Boolean(touched.cname && errors.cname)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel htmlFor="outlined-adornment-email-register">name</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
-                                type="aname"
-                                value={values.aname}
-                                name="aname"
+                                type="cname"
+                                value={values.cname}
+                                name="cname"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 inputProps={{}}
                             />
-                            {touched.aname && errors.aname && (
+                            {touched.cname && errors.cname && (
                                 <FormHelperText error id="standard-weight-helper-text--register">
-                                    {errors.aname}
+                                    {errors.cname}
                                 </FormHelperText>
                             )}
                         </FormControl>

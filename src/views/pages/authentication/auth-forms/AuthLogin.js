@@ -140,13 +140,13 @@ const FirebaseLogin = ({ ...others }) => {
                     try {
                         if (scriptedRef.current) {
                             const authapi = new AuthApi();
-                            authapi.adminLogin({ account: values.email, password: sha1(values.password) }).then((res) => {
+                            authapi.customerLogin({ account: values.email, password: sha1(values.password) }).then((res) => {
                                 if (res.data.token) {
                                     setStatus({ success: true });
                                     setSubmitting(false);
                                     // console.log(res.data);
-                                    localStorage.setItem('admin', JSON.stringify(res.data.admin));
-                                    localStorage.setItem('admin_token', res.data.token);
+                                    localStorage.setItem('customer', JSON.stringify(res.data.customer));
+                                    localStorage.setItem('customer_token', res.data.token);
                                     // console.log(localStorage.getItem('admin'));
                                     window.location.href = '/dashboard';
                                 } else {
