@@ -42,7 +42,7 @@ async function poll(fn, fnCondition, ms) {
         // eslint-disable-next-line no-await-in-loop
         result = await fn();
         count += 1;
-        if (count > 16) {
+        if (count > 30) {
             break;
         }
     }
@@ -53,7 +53,7 @@ export class AuthApi {
     constructor() {
         this.instance = axios.create({
             baseURL: `${authBase}/`,
-            timeout: 1050,
+            // timeout: 1050,
             headers: { Accept: 'application/json' }
         });
     }
@@ -240,15 +240,19 @@ export class EntityApi {
 
     // Order
     async getOrders() {
-        return this.instance.get('/order');
+        return this.instance.get('/orders');
     }
 
     async getOrder(oid) {
-        return this.instance.get(`/order/${oid}`);
+        return this.instance.get(`/orders/${oid}`);
     }
 
     async addOrder(data) {
-        return this.instance.post('/order', data);
+        return this.instance.post('/orders', data);
+    }
+
+    async updateOrder(data) {
+        return this.instance.put('/orders', data);
     }
 
     // WorkFlow
