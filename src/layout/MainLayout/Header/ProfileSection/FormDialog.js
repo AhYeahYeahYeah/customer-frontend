@@ -139,6 +139,7 @@ export default function FormDialog({ open, handleClose, customer }) {
                                 <Grid item xs={6}>
                                     <TextField
                                         name="cardnum"
+                                        disabled={customerProfile.cardNum !== ''}
                                         label="银行卡号"
                                         defaultValue={customerProfile.cardNum}
                                         onChange={(e) => setCardNum(e.target.value)}

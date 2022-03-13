@@ -3,34 +3,41 @@ import TextField from '@mui/material/TextField';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 
-export default function CustomerInfo({ setPhoneNum, setPayment, setPassword }) {
+export default function CustomerInfo({ setPhoneNum, setPayment, setPassword, profileFlag }) {
     return (
         <>
             <Typography variant="h4" gutterBottom>
                 填写您的信息
             </Typography>
+
             <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
-                        id="phoneNum"
-                        label="手机号"
-                        fullWidth
-                        variant="standard"
-                        onChange={(e) => setPhoneNum(e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
-                        id="password"
-                        label="密码"
-                        fullWidth
-                        variant="standard"
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </Grid>
+                {profileFlag === true ? (
+                    <>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                required
+                                id="phoneNum"
+                                label="手机号"
+                                fullWidth
+                                variant="standard"
+                                onChange={(e) => setPhoneNum(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                required
+                                id="password"
+                                label="密码"
+                                fullWidth
+                                variant="standard"
+                                type="password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Grid>
+                    </>
+                ) : (
+                    ''
+                )}
                 <Grid item xs={12} md={12}>
                     <TextField
                         required
@@ -49,5 +56,6 @@ export default function CustomerInfo({ setPhoneNum, setPayment, setPassword }) {
 CustomerInfo.propTypes = {
     setPassword: PropTypes.func,
     setPhoneNum: PropTypes.func,
-    setPayment: PropTypes.func
+    setPayment: PropTypes.func,
+    profileFlag: PropTypes.bool
 };

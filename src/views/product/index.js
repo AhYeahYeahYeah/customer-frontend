@@ -6,7 +6,7 @@ import { CardHeader, Grid, Snackbar, Alert } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { ShoppingCart, StarOutlined } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { EntityApi } from '../../api/restful';
+import { ConductorApi, EntityApi } from '../../api/restful';
 import ComboBox from './ComboBox';
 import SearchProduct from './SearchProduct';
 import BuyModel from './BuyModel';
@@ -27,6 +27,7 @@ export default function Product() {
     const [starProduct, setStarProduct] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState('');
+    const [profileFlag, setProfileFlag] = useState(false);
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
@@ -124,26 +125,41 @@ export default function Product() {
     };
 
     const handleOpen = (value) => {
+        const conductor = new ConductorApi();
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
-        entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
-            console.log(res);
-            if (
-                res.data[0].sid === '' ||
-                res.data[0].phoneNum === '' ||
-                res.data[0].address === '' ||
-                res.data[0].cardNum === '' ||
-                res.data[0].birthday === ''
-            ) {
-                setSnackbarMsg('请完善您的个人信息');
-                setSnackbarOpen(true);
-            } else {
-                setBuyProduct(value);
-                setOpen(true);
-            }
+        // eslint-disable-next-line no-loop-func
+        entityApi.getProduct(value.pid).then((res) => {
+            entityApi.getWorkFlow(res.data[0].fid).then((rs) => {
+                conductor.getMetaDataWorkFlow(rs.data[0].name).then((data) => {
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < data.data.tasks.length; i++) {
+                        if (data.data.tasks[i].name.indexOf('Profile') !== -1) {
+                            setProfileFlag(true);
+                            break;
+                        }
+                    }
+                    entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
+                        if (
+                            res.data[0].sid === '' ||
+                            res.data[0].phoneNum === '' ||
+                            res.data[0].address === '' ||
+                            res.data[0].cardNum === '' ||
+                            res.data[0].birthday === ''
+                        ) {
+                            setSnackbarMsg('请完善您的个人信息');
+                            setSnackbarOpen(true);
+                        } else {
+                            setBuyProduct(value);
+                            setOpen(true);
+                        }
+                    });
+                });
+            });
         });
     };
 
     const handleClose = () => {
+        setProfileFlag(false);
         setOpen(false);
     };
     function updateProductSort(value) {
@@ -243,8 +259,13 @@ export default function Product() {
     }, []);
     return (
         <div>
-            {/* eslint-disable-next-line react/jsx-no-bind */}
-            <AlertModel msg={msg} open={openStar} handleClose={handleCloseStar} updateProductStar={updateProductStar} />
+            <AlertModel
+                msg={msg}
+                open={openStar}
+                handleClose={handleCloseStar}
+                /* eslint-disable-next-line react/jsx-no-bind */
+                updateProductStar={updateProductStar}
+            />
             <Grid container spacing={2}>
                 <Grid item md={7.5} xs={12} sx={{ ml: 1 }}>
                     {/* eslint-disable-next-line react/jsx-no-bind */}
@@ -256,7 +277,7 @@ export default function Product() {
                 </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ mt: 0.3 }}>
-                <BuyModel open={open} handleClose={handleClose} buyProduct={buyProduct} />
+                <BuyModel open={open} handleClose={handleClose} buyProduct={buyProduct} profileFlag={profileFlag} />
                 {productsSort.map((product) => (
                     // Enterprise card is full width at sm breakpoint
                     <Grid item key={product.pid} md={3} sm={6} xs={12}>

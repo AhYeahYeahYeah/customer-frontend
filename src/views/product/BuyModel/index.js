@@ -17,7 +17,7 @@ import sha1 from 'js-sha1';
 
 const steps = ['产品信息', '填写信息'];
 
-export default function BuyModel({ open, handleClose, buyProduct }) {
+export default function BuyModel({ open, handleClose, buyProduct, profileFlag }) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [orderStatus, setOrderStatus] = React.useState(-1);
     const [phoneNum, setPhoneNum] = React.useState('');
@@ -28,7 +28,9 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
             case 0:
                 return <ProductInfo buyProduct={buyProduct} />;
             case 1:
-                return <CustomerInfo setPhoneNum={setPhoneNum} setPassword={setPassword} setPayment={setPayment} />;
+                return (
+                    <CustomerInfo setPhoneNum={setPhoneNum} setPassword={setPassword} setPayment={setPayment} profileFlag={profileFlag} />
+                );
             default:
                 throw new Error('Unknown step');
         }
@@ -169,5 +171,6 @@ BuyModel.propTypes = {
     handleClose: PropTypes.func.isRequired,
     // onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    buyProduct: PropTypes.object
+    buyProduct: PropTypes.object,
+    profileFlag: PropTypes.bool
 };
