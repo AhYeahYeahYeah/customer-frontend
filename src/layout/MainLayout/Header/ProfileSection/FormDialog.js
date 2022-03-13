@@ -66,7 +66,11 @@ export default function FormDialog({ open, handleClose, customer }) {
             if (res.status === 200) {
                 setCustomerProfile(res.data[0]);
                 setValue(res.data[0].birthday);
-                setData(res.data[0].address);
+                if (res.data[0].address === null || res.data[0].address === '' || res.data[0].address === undefined) {
+                    setData('');
+                } else {
+                    setData(res.data[0].address);
+                }
             }
         });
     }, [open]);
