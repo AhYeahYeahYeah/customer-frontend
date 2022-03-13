@@ -123,11 +123,11 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                             orderStatus === 0 ? (
                                 <CircularProgress sx={{ ml: 32 }} />
                             ) : orderStatus === 1 ? (
-                                <Typography variant="subtitle1" sx={{ ml: 27 }}>
+                                <Typography variant="h4" sx={{ ml: 27 }}>
                                     您的订单生成成功
                                 </Typography>
                             ) : (
-                                <Typography variant="subtitle1" sx={{ ml: 27 }}>
+                                <Typography variant="h4" sx={{ ml: 27 }}>
                                     您的订单生成失败
                                 </Typography>
                             )

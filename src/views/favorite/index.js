@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardHeader, Grid } from '@mui/material';
+import { Alert, CardHeader, Grid, Snackbar } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { ShoppingCart, StarOutlined } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
@@ -25,6 +25,12 @@ export default function Favorite() {
     const [openStar, setOpenStar] = useState(false);
     const [msg, setMsg] = useState('');
     const [starProduct, setStarProduct] = useState({});
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMsg, setSnackbarMsg] = useState('');
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
 
     function updateProductStar() {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
@@ -120,9 +126,22 @@ export default function Favorite() {
     };
 
     const handleOpen = (value) => {
-        // console.log(JSON.parse(localStorage.getItem('customer')));
-        setBuyProduct(value);
-        setOpen(true);
+        const entityApi = new EntityApi(localStorage.getItem('customer_token'));
+        entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
+            if (
+                res.data[0].sid === '' ||
+                res.data[0].phoneNum === '' ||
+                res.data[0].address === '' ||
+                res.data[0].cardNum === '' ||
+                res.data[0].birthday === ''
+            ) {
+                setSnackbarMsg('请完善您的个人信息');
+                setSnackbarOpen(true);
+            } else {
+                setBuyProduct(value);
+                setOpen(true);
+            }
+        });
     };
 
     const handleClose = () => {
@@ -132,7 +151,7 @@ export default function Favorite() {
         setSortValue(value);
         if (!value) return;
         switch (value) {
-            case '为您推荐':
+            case '全部收藏':
                 setProductsSort(products);
                 break;
             case '定期存款':
@@ -195,13 +214,11 @@ export default function Favorite() {
                 productsQueue.push({ sid: starData.data[i].sid });
             }
             Promise.all(getQueue).then((getRes) => {
-                console.log(getRes);
                 // eslint-disable-next-line no-plusplus
                 for (let i = 0; i < getRes.length; i++) {
                     getRes[i].data[0].favorite = productsQueue[i].sid;
                     productsQueue[i] = getRes[i].data[0];
                 }
-                console.log(productsQueue);
                 const queueTime = [];
                 const queueCurrent = [];
                 const queueNotice = [];
@@ -308,6 +325,16 @@ export default function Favorite() {
                     </Grid>
                 ))}
             </Grid>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardHeader, Grid } from '@mui/material';
+import { CardHeader, Grid, Snackbar, Alert } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { ShoppingCart, StarOutlined } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
@@ -25,7 +25,12 @@ export default function Product() {
     const [openStar, setOpenStar] = useState(false);
     const [msg, setMsg] = useState('');
     const [starProduct, setStarProduct] = useState({});
-
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMsg, setSnackbarMsg] = useState('');
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     function updateProductStar() {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         const star = {
@@ -119,9 +124,23 @@ export default function Product() {
     };
 
     const handleOpen = (value) => {
-        // console.log(JSON.parse(localStorage.getItem('customer')));
-        setBuyProduct(value);
-        setOpen(true);
+        const entityApi = new EntityApi(localStorage.getItem('customer_token'));
+        entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
+            console.log(res);
+            if (
+                res.data[0].sid === '' ||
+                res.data[0].phoneNum === '' ||
+                res.data[0].address === '' ||
+                res.data[0].cardNum === '' ||
+                res.data[0].birthday === ''
+            ) {
+                setSnackbarMsg('请完善您的个人信息');
+                setSnackbarOpen(true);
+            } else {
+                setBuyProduct(value);
+                setOpen(true);
+            }
+        });
     };
 
     const handleClose = () => {
@@ -303,6 +322,16 @@ export default function Product() {
                     </Grid>
                 ))}
             </Grid>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

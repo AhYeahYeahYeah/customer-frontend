@@ -1,8 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
 import axios from 'axios';
 
-const baseUrl = 'http://localhost';
-// const baseUrl = 'http://conductor.rinne.top';
+// const baseUrl = 'http://localhost';
+const baseUrl = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
 const servicesBackendPort = '10452';
 const conductorPort = '5000';
@@ -253,6 +253,10 @@ export class EntityApi {
 
     async updateOrder(data) {
         return this.instance.put('/orders', data);
+    }
+
+    async getByCustomer(cid) {
+        return this.instance.get(`/orders/getByCustomer/${cid}`);
     }
 
     // WorkFlow
