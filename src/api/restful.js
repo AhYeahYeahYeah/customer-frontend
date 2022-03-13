@@ -298,7 +298,7 @@ export class ConductorApi {
     startQuery = async (id) => {
         const fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
         const validate = (result) => result.data.status !== 'COMPLETED' && result.data.status !== 'FAILED';
-        return poll(fetchReport, validate, 500);
+        return poll(fetchReport, validate, 700);
     };
 
     setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));
