@@ -27,7 +27,7 @@ export const lock = `${servicesBackendBase}/storage/lock`;
 export const unlock = `${servicesBackendBase}/storage/unlock`;
 export const update = `${servicesBackendBase}/storage/update`;
 
-function wait(ms = 700) {
+function wait(ms = 500) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
@@ -42,7 +42,7 @@ async function poll(fn, fnCondition, ms) {
         // eslint-disable-next-line no-await-in-loop
         result = await fn();
         count += 1;
-        if (count > 60) {
+        if (count > 16) {
             break;
         }
     }
@@ -298,7 +298,7 @@ export class ConductorApi {
     startQuery = async (id) => {
         const fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
         const validate = (result) => result.data.status !== 'COMPLETED' && result.data.status !== 'FAILED';
-        return poll(fetchReport, validate, 700);
+        return poll(fetchReport, validate, 500);
     };
 
     setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));

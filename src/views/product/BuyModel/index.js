@@ -77,7 +77,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                     //     setOrderStatus(2);
                     // }
                 });
-                // socket.close();
+                socket.close();
             });
         }
     };
