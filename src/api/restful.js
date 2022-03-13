@@ -275,6 +275,19 @@ export class EntityApi {
     async updateWorkFlow(data) {
         return this.instance.put('/workflow', data);
     }
+
+    // Star
+    async addStar(data) {
+        return this.instance.post('/star', data);
+    }
+
+    async deleteStar(sid) {
+        return this.instance.delete(`/star/${sid}`);
+    }
+
+    async getStar(cid) {
+        return this.instance.get(`/star/${cid}`);
+    }
 }
 
 export class ConductorApi {

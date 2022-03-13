@@ -10,6 +10,7 @@ import { EntityApi } from '../../api/restful';
 import ComboBox from './ComboBox';
 import SearchProduct from './SearchProduct';
 import BuyModel from './BuyModel';
+import AlertModel from './AlertModel';
 
 export default function Product() {
     const [products, setProducts] = useState([]);
@@ -21,6 +22,101 @@ export default function Product() {
     const [sortValue, setSortValue] = useState('');
     const [open, setOpen] = useState(false);
     const [buyProduct, setBuyProduct] = useState({});
+    const [openStar, setOpenStar] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [starProduct, setStarProduct] = useState({});
+
+    function updateProductStar() {
+        const entityApi = new EntityApi(localStorage.getItem('customer_token'));
+        const star = {
+            cid: JSON.parse(localStorage.getItem('customer')).cid,
+            pid: starProduct.pid
+        };
+        const productUpdate = products;
+        if (starProduct.favorite !== '') {
+            entityApi.deleteStar(starProduct.favorite).then((res) => {
+                if (res.status === 200) {
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < productUpdate.length; i++) {
+                        if (starProduct.pid === productUpdate[i].pid) {
+                            productUpdate[i].favorite = '';
+                        }
+                    }
+                    setProducts(productUpdate);
+                    const queueTime = [];
+                    const queueCurrent = [];
+                    const queueNotice = [];
+                    const queueBig = [];
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < productUpdate.length; i++) {
+                        if (productUpdate[i].productName.indexOf('定期') !== -1) {
+                            queueTime.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('活期') !== -1) {
+                            queueCurrent.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('通知') !== -1) {
+                            queueNotice.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('大额') !== -1) {
+                            queueBig.push(productUpdate[i]);
+                        }
+                    }
+                    setProductsBig(queueBig);
+                    setProductsCurrent(queueCurrent);
+                    setProductsNotice(queueNotice);
+                    setProductsTime(queueTime);
+                    setOpenStar(false);
+                    setStarProduct({});
+                }
+            });
+        } else {
+            entityApi.addStar(star).then((res) => {
+                if (res.status === 200) {
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < productUpdate.length; i++) {
+                        if (star.pid === productUpdate[i].pid) {
+                            productUpdate[i].favorite = res.data.msg;
+                        }
+                    }
+                    setProducts(productUpdate);
+                    const queueTime = [];
+                    const queueCurrent = [];
+                    const queueNotice = [];
+                    const queueBig = [];
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < productUpdate.length; i++) {
+                        if (productUpdate[i].productName.indexOf('定期') !== -1) {
+                            queueTime.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('活期') !== -1) {
+                            queueCurrent.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('通知') !== -1) {
+                            queueNotice.push(productUpdate[i]);
+                        } else if (productUpdate[i].productName.indexOf('大额') !== -1) {
+                            queueBig.push(productUpdate[i]);
+                        }
+                    }
+                    setProductsBig(queueBig);
+                    setProductsCurrent(queueCurrent);
+                    setProductsNotice(queueNotice);
+                    setProductsTime(queueTime);
+                    setOpenStar(false);
+                    setStarProduct({});
+                }
+            });
+        }
+    }
+    const handleClickOpenStar = (value) => {
+        if (value.favorite) {
+            setMsg('你确定要取消收藏产品吗?');
+        } else {
+            setMsg(' 你确定要收藏该产品吗?');
+        }
+        setStarProduct(value);
+        setOpenStar(true);
+    };
+
+    const handleCloseStar = () => {
+        setOpenStar(false);
+        setStarProduct({});
+    };
 
     const handleOpen = (value) => {
         // console.log(JSON.parse(localStorage.getItem('customer')));
@@ -32,7 +128,6 @@ export default function Product() {
         setOpen(false);
     };
     function updateProductSort(value) {
-        console.log(value);
         setSortValue(value);
         if (!value) return;
         switch (value) {
@@ -56,9 +151,7 @@ export default function Product() {
         }
     }
     function updateSearchProduct(value) {
-        console.log(value);
         if (value === '') {
-            console.log();
             switch (sortValue) {
                 case '为您推荐':
                     setProductsSort(products);
@@ -95,32 +188,44 @@ export default function Product() {
         entityApi.getProducts().then((res) => {
             setProducts(res.data);
             setProductsSort(res.data);
-            console.log(res.data);
-            const queueTime = [];
-            const queueCurrent = [];
-            const queueNotice = [];
-            const queueBig = [];
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < res.data.length; i++) {
-                res.data[i].favorite = false;
-                if (res.data[i].productName.indexOf('定期') !== -1) {
-                    queueTime.push(res.data[i]);
-                } else if (res.data[i].productName.indexOf('活期') !== -1) {
-                    queueCurrent.push(res.data[i]);
-                } else if (res.data[i].productName.indexOf('通知') !== -1) {
-                    queueNotice.push(res.data[i]);
-                } else if (res.data[i].productName.indexOf('大额') !== -1) {
-                    queueBig.push(res.data[i]);
+            entityApi.getStar(JSON.parse(localStorage.getItem('customer')).cid).then((starData) => {
+                // eslint-disable-next-line no-plusplus
+                for (let i = 0; i < res.data.length; i++) {
+                    res.data[i].favorite = '';
+                    // eslint-disable-next-line no-plusplus
+                    for (let j = 0; j < starData.data.length; j++) {
+                        if (res.data[i].pid === starData.data[j].pid) {
+                            res.data[i].favorite = starData.data[j].sid;
+                        }
+                    }
                 }
-            }
-            setProductsBig(queueBig);
-            setProductsCurrent(queueCurrent);
-            setProductsNotice(queueNotice);
-            setProductsTime(queueTime);
+                const queueTime = [];
+                const queueCurrent = [];
+                const queueNotice = [];
+                const queueBig = [];
+                // eslint-disable-next-line no-plusplus
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].productName.indexOf('定期') !== -1) {
+                        queueTime.push(res.data[i]);
+                    } else if (res.data[i].productName.indexOf('活期') !== -1) {
+                        queueCurrent.push(res.data[i]);
+                    } else if (res.data[i].productName.indexOf('通知') !== -1) {
+                        queueNotice.push(res.data[i]);
+                    } else if (res.data[i].productName.indexOf('大额') !== -1) {
+                        queueBig.push(res.data[i]);
+                    }
+                }
+                setProductsBig(queueBig);
+                setProductsCurrent(queueCurrent);
+                setProductsNotice(queueNotice);
+                setProductsTime(queueTime);
+            });
         });
     }, []);
     return (
         <div>
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <AlertModel msg={msg} open={openStar} handleClose={handleCloseStar} updateProductStar={updateProductStar} />
             <Grid container spacing={2}>
                 <Grid item md={7.5} xs={12} sx={{ ml: 1 }}>
                     {/* eslint-disable-next-line react/jsx-no-bind */}
@@ -143,11 +248,10 @@ export default function Product() {
                                 // titleTypographyProps={{ align: 'center' }}
                                 action={
                                     <GridActionsCellItem
-                                        icon={<StarOutlined color={product.favorite ? 'disabled' : 'primary'} />}
+                                        icon={<StarOutlined color={product.favorite !== '' ? 'primary' : 'disabled'} />}
                                         label="Toggle Admin"
                                         onClick={() => {
-                                            product.favorite = !product.favorite;
-                                            console.log(product.favorite);
+                                            handleClickOpenStar(product);
                                         }}
                                     />
                                 }
