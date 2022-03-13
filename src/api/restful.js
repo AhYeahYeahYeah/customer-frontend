@@ -27,7 +27,7 @@ export const lock = `${servicesBackendBase}/storage/lock`;
 export const unlock = `${servicesBackendBase}/storage/unlock`;
 export const update = `${servicesBackendBase}/storage/update`;
 
-function wait(ms = 500) {
+function wait(ms = 700) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
@@ -42,7 +42,7 @@ async function poll(fn, fnCondition, ms) {
         // eslint-disable-next-line no-await-in-loop
         result = await fn();
         count += 1;
-        if (count > 30) {
+        if (count > 60) {
             break;
         }
     }
