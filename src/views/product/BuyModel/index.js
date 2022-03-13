@@ -57,20 +57,28 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                 socket.addEventListener('message', (event) => {
                     // console.log('Message from server ', event.data);
                     const conductor = new ConductorApi();
-                    conductor.startQuery(event.data).then((re) => {
-                        // console.log(re);
-                        if (re.data.status === 'COMPLETED') {
-                            setOrderStatus(1);
-                            entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
-                                console.log(r);
-                            });
-                        } else {
+                    conductor
+                        .startQuery(event.data)
+                        .then((re) => {
+                            // console.log(re);
+                            if (re.data.status === 'COMPLETED') {
+                                setOrderStatus(1);
+                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
+                                    console.log(r);
+                                });
+                            } else {
+                                setOrderStatus(2);
+                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
+                                    console.log(r);
+                                });
+                            }
+                        })
+                        .catch(() => {
                             setOrderStatus(2);
                             entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
                                 console.log(r);
                             });
-                        }
-                    });
+                        });
                     // if (event.data) {
                     //     setOrderStatus(1);
                     // } else {
