@@ -53,7 +53,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
             // console.log(orderData);
             entityApi.addOrder(orderData).then((res) => {
                 // console.log(res.data);
-                const socket = new WebSocket(`ws://conductor.rinne.top/websocket/${res.data.msg}`);
+                const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
                 socket.addEventListener('message', (event) => {
                     // console.log('Message from server ', event.data);
                     const conductor = new ConductorApi();
