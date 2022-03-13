@@ -148,7 +148,7 @@ const FirebaseLogin = ({ ...others }) => {
                                     localStorage.setItem('customer', JSON.stringify(res.data.customer));
                                     localStorage.setItem('customer_token', res.data.token);
                                     // console.log(localStorage.getItem('admin'));
-                                    window.location.href = '/dashboard';
+                                    window.location.href = '/product';
                                 } else {
                                     setSnackbarMsg('登陆失败！');
                                     setSnackbarOpen(true);

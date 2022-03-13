@@ -9,7 +9,7 @@ import { FeaturedPlayList, LocalMall } from '@mui/icons-material';
 
 export default function Navigation() {
     // const theme = useTheme();
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState('产品');
     const [isHover, setHover] = React.useState(false);
     // const [unHover,setUnhover]= React.useState(false);
     const handleChange = (event, newValue) => {
