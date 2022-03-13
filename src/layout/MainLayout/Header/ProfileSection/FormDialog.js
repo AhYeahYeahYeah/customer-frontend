@@ -30,7 +30,10 @@ export default function FormDialog({ open, handleClose, customer }) {
     };
     const handleSubmit = () => {
         // eslint-disable-next-line no-use-before-define
-        const queue = customerProfile.address.trim().split(/\s+/);
+        let queue = null;
+        if (customerProfile.address !== null) {
+            queue = customerProfile.address.trim().split(/\s+/);
+        }
         // eslint-disable-next-line no-unreachable
         const customerBase = {
             // eslint-disable-next-line react/prop-types
@@ -51,12 +54,16 @@ export default function FormDialog({ open, handleClose, customer }) {
             } ${data.country === undefined ? queue[2] : data.country === '' ? queue[2] : data.country}`,
             cardNum
         };
+        // console.log(customerPro);
+        // console.log(customerBase);
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         entityApi.updateCustomer(customerBase).then();
         entityApi.updateCustomerProfile(customerPro).then();
         entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
             setCustomerProfile(res.data[0]);
             setData('');
+            setValue('');
+            setCardNum('');
             handleClose();
         });
     };
@@ -64,7 +71,7 @@ export default function FormDialog({ open, handleClose, customer }) {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
             if (res.status === 200) {
-                console.log(res.data[0]);
+                // console.log(res.data[0]);
                 setCustomerProfile(res.data[0]);
                 setValue(res.data[0].birthday);
                 if (res.data[0].address === null || res.data[0].address === '' || res.data[0].address === undefined) {
@@ -135,6 +142,7 @@ export default function FormDialog({ open, handleClose, customer }) {
                                             label="出生日期"
                                             value={value}
                                             onChange={(newValue) => {
+                                                console.log(newValue);
                                                 setValue(newValue);
                                             }}
                                             renderInput={(params) => <TextField {...params} />}
