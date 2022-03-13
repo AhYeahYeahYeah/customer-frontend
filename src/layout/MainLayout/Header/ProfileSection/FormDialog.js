@@ -64,6 +64,7 @@ export default function FormDialog({ open, handleClose, customer }) {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
             if (res.status === 200) {
+                console.log(res.data[0]);
                 setCustomerProfile(res.data[0]);
                 setValue(res.data[0].birthday);
                 if (res.data[0].address === null || res.data[0].address === '' || res.data[0].address === undefined) {
@@ -143,7 +144,7 @@ export default function FormDialog({ open, handleClose, customer }) {
                                 <Grid item xs={6}>
                                     <TextField
                                         name="cardnum"
-                                        disabled={customerProfile.cardNum !== ''}
+                                        disabled={customerProfile.cardNum !== null}
                                         label="银行卡号"
                                         defaultValue={customerProfile.cardNum}
                                         onChange={(e) => setCardNum(e.target.value)}
