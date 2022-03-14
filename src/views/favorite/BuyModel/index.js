@@ -52,9 +52,6 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
             entityApi.addOrder(orderData).then((res) => {
                 // console.log(res.data);
                 const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
-                socket.addEventListener('open', () => {
-                    socket.send(res.data.msg);
-                });
                 socket.addEventListener('message', (event) => {
                     console.log(event);
                     if (event.data !== '连接成功') {
@@ -82,6 +79,9 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                     // } else {
                     //     setOrderStatus(2);
                     // }
+                });
+                socket.addEventListener('open', () => {
+                    socket.send(res.data.msg);
                 });
             });
         }
