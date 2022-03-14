@@ -53,13 +53,17 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
             setPassword('');
             setPhoneNum('');
             entityApi.addOrder(orderData).then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 if (res.status === 200) {
                     const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
                     socket.addEventListener('open', () => {
                         socket.send(res.data.msg);
                     });
+                    socket.addEventListener('message', () => {
+                        // console.log(event);
+                    });
                     socket.addEventListener('message', (event) => {
+                        // console.log(event);
                         // console.log('Message from server ', event.data);
                         const conductor = new ConductorApi();
                         conductor.startQuery(event.data).then((re) => {

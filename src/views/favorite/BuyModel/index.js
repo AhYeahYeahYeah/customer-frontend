@@ -55,6 +55,9 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                 socket.addEventListener('open', () => {
                     socket.send(res.data.msg);
                 });
+                socket.addEventListener('message', () => {
+                    // console.log(event);
+                });
                 socket.addEventListener('message', (event) => {
                     // console.log('Message from server ', event.data);
                     const conductor = new ConductorApi();
