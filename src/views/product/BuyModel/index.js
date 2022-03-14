@@ -59,29 +59,28 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                     socket.addEventListener('open', () => {
                         socket.send(res.data.msg);
                     });
-                    socket.addEventListener('message', () => {
-                        // console.log(event);
-                    });
                     socket.addEventListener('message', (event) => {
-                        // console.log(event);
+                        console.log(event);
+                        if (event.data !== '连接成功') {
+                            const conductor = new ConductorApi();
+                            conductor.startQuery(event.data).then((re) => {
+                                // console.log(re);
+                                if (re.data.status === 'COMPLETED') {
+                                    setOrderStatus(1);
+                                    entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
+                                        console.log(r);
+                                        socket.close();
+                                    });
+                                } else {
+                                    setOrderStatus(2);
+                                    entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
+                                        console.log(r);
+                                        socket.close();
+                                    });
+                                }
+                            });
+                        }
                         // console.log('Message from server ', event.data);
-                        const conductor = new ConductorApi();
-                        conductor.startQuery(event.data).then((re) => {
-                            // console.log(re);
-                            if (re.data.status === 'COMPLETED') {
-                                setOrderStatus(1);
-                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
-                                    console.log(r);
-                                    socket.close();
-                                });
-                            } else {
-                                setOrderStatus(2);
-                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
-                                    console.log(r);
-                                    socket.close();
-                                });
-                            }
-                        });
                         // if (event.data) {
                         //     setOrderStatus(1);
                         // } else {
