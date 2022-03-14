@@ -140,7 +140,7 @@ export default function Favorite() {
                 res.data[0].cardNum === null ||
                 res.data[0].birthday === null
             ) {
-                setSnackbarMsg('请完善您的个人信息');
+                setSnackbarMsg('请完善您的个人信息再进行购买');
                 setSnackbarOpen(true);
             } else {
                 setBuyProduct(value);

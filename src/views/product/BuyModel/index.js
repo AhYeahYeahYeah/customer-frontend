@@ -52,6 +52,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
             };
             setPassword('');
             setPhoneNum('');
+            // console.log(orderData);
             entityApi.addOrder(orderData).then((res) => {
                 // console.log(res.data);
                 if (res.status === 200) {

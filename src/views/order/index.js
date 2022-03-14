@@ -191,6 +191,7 @@ export default function CollapsibleTable() {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         entityApi.getByCustomer(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
             if (res.status === 200) {
+                // console.log(res);
                 const queue = [];
                 // eslint-disable-next-line no-plusplus
                 const productInfo = [];
@@ -199,6 +200,7 @@ export default function CollapsibleTable() {
                     queue.push(entityApi.getProduct(res.data[i].pid));
                 }
                 Promise.all(queue).then((re) => {
+                    // console.log(re);
                     // eslint-disable-next-line no-plusplus
                     for (let i = 0; i < re.length; i++) {
                         productInfo.push(re[i].data[0]);

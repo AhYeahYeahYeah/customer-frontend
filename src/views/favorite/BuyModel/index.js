@@ -53,7 +53,7 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                 // console.log(res.data);
                 const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
                 socket.addEventListener('message', (event) => {
-                    console.log(event);
+                    // console.log(event);
                     if (event.data !== '连接成功') {
                         const conductor = new ConductorApi();
                         conductor.startQuery(event.data).then((re) => {

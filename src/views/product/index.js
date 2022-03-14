@@ -151,7 +151,7 @@ export default function Product() {
                             res.data[0].cardNum === null ||
                             res.data[0].birthday === null
                         ) {
-                            setSnackbarMsg('请完善您的个人信息');
+                            setSnackbarMsg('请完善您的个人信息再进行购买');
                             setSnackbarOpen(true);
                         } else {
                             setBuyProduct(value);
@@ -353,6 +353,7 @@ export default function Product() {
                 open={snackbarOpen}
                 autoHideDuration={6000}
                 onClose={handleSnackbarClose}
+                color="black"
             >
                 <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
                     {snackbarMsg}
