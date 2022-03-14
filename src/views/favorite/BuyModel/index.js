@@ -80,9 +80,9 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                     //     setOrderStatus(2);
                     // }
                 });
-                socket.addEventListener('open', () => {
-                    socket.send(res.data.msg);
-                });
+                // socket.addEventListener('open', () => {
+                //     socket.send(res.data.msg);
+                // });
             });
         }
     };
