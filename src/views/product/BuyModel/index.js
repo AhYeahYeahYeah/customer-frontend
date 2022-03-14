@@ -57,7 +57,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                 if (res.status === 200) {
                     const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
                     socket.addEventListener('open', () => {
-                        socket.send('Hello Server!');
+                        socket.send(res.data.msg);
                     });
                     socket.addEventListener('message', (event) => {
                         // console.log('Message from server ', event.data);
