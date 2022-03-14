@@ -52,6 +52,16 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
             entityApi.addOrder(orderData).then((res) => {
                 // console.log(res.data);
                 const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
+                let response = null;
+                socket.addEventListener('message', (event) => {
+                    response = event.data;
+                });
+                // eslint-disable-next-line no-constant-condition
+                while (1) {
+                    if (response !== null) {
+                        break;
+                    }
+                }
                 socket.addEventListener('open', () => {
                     socket.send(res.data.msg);
                 });
