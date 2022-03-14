@@ -54,31 +54,31 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                 const socket = new WebSocket(`ws://conductor.rinne.top:10451/websocket/${res.data.msg}`);
                 socket.addEventListener('open', () => {
                     socket.send('Hello Server!');
-                });
-                socket.addEventListener('message', (event) => {
-                    // console.log('Message from server ', event.data);
-                    const conductor = new ConductorApi();
-                    conductor.startQuery(event.data).then((re) => {
-                        // console.log(re);
-                        if (re.data.status === 'COMPLETED') {
-                            setOrderStatus(1);
-                            entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
-                                console.log(r);
-                            });
-                        } else {
-                            setOrderStatus(2);
-                            entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
-                                console.log(r);
-                            });
-                        }
+                    socket.addEventListener('message', (event) => {
+                        // console.log('Message from server ', event.data);
+                        const conductor = new ConductorApi();
+                        conductor.startQuery(event.data).then((re) => {
+                            // console.log(re);
+                            if (re.data.status === 'COMPLETED') {
+                                setOrderStatus(1);
+                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 1 }).then((r) => {
+                                    console.log(r);
+                                });
+                            } else {
+                                setOrderStatus(2);
+                                entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
+                                    console.log(r);
+                                });
+                            }
+                        });
+                        // if (event.data) {
+                        //     setOrderStatus(1);
+                        // } else {
+                        //     setOrderStatus(2);
+                        // }
                     });
-                    // if (event.data) {
-                    //     setOrderStatus(1);
-                    // } else {
-                    //     setOrderStatus(2);
-                    // }
+                    socket.close();
                 });
-                // socket.close();
             });
         }
     };
