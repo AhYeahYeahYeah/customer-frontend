@@ -144,7 +144,12 @@ export default function Product() {
                             res.data[0].phoneNum === '' ||
                             res.data[0].address === '' ||
                             res.data[0].cardNum === '' ||
-                            res.data[0].birthday === ''
+                            res.data[0].birthday === '' ||
+                            res.data[0].sid === null ||
+                            res.data[0].phoneNum === null ||
+                            res.data[0].address === null ||
+                            res.data[0].cardNum === null ||
+                            res.data[0].birthday === null
                         ) {
                             setSnackbarMsg('请完善您的个人信息');
                             setSnackbarOpen(true);
