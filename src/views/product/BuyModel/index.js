@@ -83,7 +83,6 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                         // } else {
                         //     setOrderStatus(2);
                         // }
-
                     });
                 }
             });
