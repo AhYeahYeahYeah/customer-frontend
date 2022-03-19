@@ -160,9 +160,7 @@ const ProfileSection = () => {
                                     <Box sx={{ p: 1 }}>
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h4">
-                                                    {new Date().getHours() < 12 ? 'Good Morning' : 'Good evening'},
-                                                </Typography>
+                                                <Typography variant="h4">{new Date().getHours() < 12 ? '早上好' : '晚上好'},</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                                                     {customer.cname}
                                                 </Typography>
@@ -195,13 +193,13 @@ const ProfileSection = () => {
                                                 <ListItemIcon>
                                                     <IconSettings stroke={1.5} size="1.3rem" />
                                                 </ListItemIcon>
-                                                <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
+                                                <ListItemText primary={<Typography variant="body2">账户信息设置</Typography>} />
                                             </ListItemButton>
                                             <ListItemButton sx={{ borderRadius: `${customization.borderRadius}px` }} onClick={handleLogout}>
                                                 <ListItemIcon>
                                                     <IconLogout stroke={1.5} size="1.3rem" />
                                                 </ListItemIcon>
-                                                <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
+                                                <ListItemText primary={<Typography variant="body2">退 出</Typography>} />
                                             </ListItemButton>
                                         </List>
                                     </Box>
