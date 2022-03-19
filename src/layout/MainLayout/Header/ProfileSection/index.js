@@ -80,6 +80,12 @@ const ProfileSection = () => {
         if (JSON.parse(localStorage.getItem('customer')) === null) {
             window.location.href = '/';
         }
+        const eneity = new EntityApi(localStorage.getItem('customer_token'));
+        eneity
+            .getProducts()
+            .then()
+            // eslint-disable-next-line no-return-assign
+            .catch(() => (window.location.href = '/'));
         setCustomer(JSON.parse(localStorage.getItem('customer')));
         prevOpen.current = open;
     }, [open]);

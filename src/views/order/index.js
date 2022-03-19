@@ -191,7 +191,6 @@ export default function CollapsibleTable() {
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
         entityApi.getByCustomer(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
             if (res.status === 200) {
-                // console.log(res);
                 const queue = [];
                 // eslint-disable-next-line no-plusplus
                 const productInfo = [];
