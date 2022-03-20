@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { AppRegistration, Login } from '@mui/icons-material';
-import img from './shouji1.png';
+import img from '../../assets/images/shouji1.png';
 import LogoSection from '../../layout/MainLayout/LogoSection';
 
 // function Copyright(props) {
@@ -46,7 +46,7 @@ export default function RootPage() {
                 <Box component="span" sx={{ position: 'fixed', top: '2%', ml: 2 }}>
                     <LogoSection />
                 </Box>
-                <Grid item xs={12} sm={6} md={6} square sx={{ background: 'white' }}>
+                <Grid item xs={12} sm={12} md={6.5} square sx={{ background: 'white' }}>
                     <Box
                         sx={{
                             my: 8,
@@ -65,7 +65,7 @@ export default function RootPage() {
                                 loading={loading_l}
                                 loadingPosition="end"
                                 variant="contained"
-                                sx={{ left: '18%', borderRadius: 15, width: 120, height: 50 }}
+                                sx={{ left: '15%', borderRadius: 15, width: 120, height: 50 }}
                                 size="large"
                                 color="primary"
                                 href="/login"
@@ -82,7 +82,7 @@ export default function RootPage() {
                                 loadingPosition="end"
                                 variant="outlined"
                                 sx={{
-                                    left: '35%',
+                                    left: '32%',
                                     borderRadius: 15,
                                     width: 120,
                                     height: 50
@@ -96,11 +96,22 @@ export default function RootPage() {
                         {/* <Copyright sx={{ mt: 30 }} /> */}
                     </Box>
                 </Grid>
-                <Grid item xs={false} sm={false} md={6}>
-                    <Box sx={{ mt: 9.5, ml: 8 }}>
-                        <img src={img} alt="" />
-                    </Box>
-                </Grid>
+                <Grid
+                    item
+                    xs={false}
+                    sm={false}
+                    md={5.5}
+                    sx={{
+                        backgroundImage: `url(${img})`,
+                        backgroundRepeat: 'no-repeat',
+                        // backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}
+                />
+                {/* <Box sx={{ mt: 9.5, ml: 8 }}> */}
+                {/*    <img src={img} alt="" /> */}
+                {/* </Box> */}
             </Grid>
         </ThemeProvider>
     );
