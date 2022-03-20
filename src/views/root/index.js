@@ -10,6 +10,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { AppRegistration, Login } from '@mui/icons-material';
 import img from '../../assets/images/shouji1.png';
 import LogoSection from '../../layout/MainLayout/LogoSection';
+import { useEffect } from 'react';
 
 // function Copyright(props) {
 //     return (
@@ -39,6 +40,13 @@ export default function RootPage() {
     function handleClick_r() {
         setLoading_r(true);
     }
+    useEffect(
+        () => () => {
+            setLoading_l(false);
+            setLoading_r(false);
+        },
+        []
+    );
     return (
         <ThemeProvider theme={theme}>
             <Grid container component="main" sx={{ height: '100vh' }}>
