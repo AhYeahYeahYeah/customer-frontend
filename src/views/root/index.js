@@ -95,6 +95,7 @@ export default function RootPage() {
                                     width: 120,
                                     height: 50
                                 }}
+                                size="large"
                                 color="success"
                                 href="/register"
                             >
