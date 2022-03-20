@@ -21,7 +21,7 @@ export default function ProductInfo({ buyProduct }) {
                 </ListItem>
                 <ListItem>
                     <ListItemText primary="年化利率" />
-                    <Typography variant="body2">{Number(buyProduct.annualRate) * 100}%</Typography>
+                    <Typography variant="body2">{(Number(buyProduct.annualRate) * 100).toFixed(2)}%</Typography>
                 </ListItem>
                 <ListItem>
                     <ListItemText primary="起存金额" />

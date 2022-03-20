@@ -231,7 +231,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 }
                                 label="记住我"
                             />
-                            <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+                            <Typography variant="subtitle1" color="primary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
                                 忘记密码？
                             </Typography>
                         </Stack>
@@ -250,7 +250,7 @@ const FirebaseLogin = ({ ...others }) => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
+                                    color="primary"
                                 >
                                     登 录
                                 </Button>

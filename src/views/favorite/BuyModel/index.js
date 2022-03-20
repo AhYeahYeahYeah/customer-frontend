@@ -155,12 +155,12 @@ export default function BuyModel({ open, handleClose, buyProduct }) {
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         {activeStep !== 0 && (
                             <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                                Back
+                                上一步
                             </Button>
                         )}
 
                         <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
-                            {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                            {activeStep === steps.length - 1 ? '确认' : '下一步'}
                         </Button>
                     </Box>
                 </DialogActions>

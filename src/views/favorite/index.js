@@ -310,7 +310,7 @@ export default function Favorite() {
                                         产品期限: {product.validityPeriod} 天
                                     </Typography>
                                     <Typography component="li" variant="subtitle1">
-                                        年化利率: {Number(product.annualRate) * 100} %
+                                        年化利率: {(Number(product.annualRate) * 100).toFixed(2)} %
                                     </Typography>
                                     <Typography component="li" variant="subtitle1">
                                         风险等级: {product.riskLevel} 级（数字越大风险越高）
