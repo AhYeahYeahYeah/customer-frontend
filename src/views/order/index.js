@@ -217,7 +217,7 @@ export default function CollapsibleTable() {
                                 new Date(Number(res.data[i].expireDate)).toLocaleString(),
                                 res.data[i].status === 1 ? '交易成功' : '交易失败',
                                 productInfo[i].productNum,
-                                Number(productInfo[i].annualRate) * 100,
+                                (Number(productInfo[i].annualRate) * 100).toFixed(2) * 100,
                                 productInfo[i].validityPeriod,
                                 Number(productInfo[i].riskLevel),
                                 productInfo[i].settlementMethod
