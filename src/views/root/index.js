@@ -50,7 +50,7 @@ export default function RootPage() {
                 <Box component="span" sx={{ position: 'fixed', top: '2%', ml: 2 }}>
                     <LogoSection />
                 </Box>
-                <Grid item xs={12} sm={12} md={6.5} square sx={{ background: 'white' }}>
+                <Grid item xs={12} sm={12} md={6.5} sx={{ background: 'white' }}>
                     <Box
                         sx={{
                             my: 8,
