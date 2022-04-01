@@ -23,6 +23,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
     const [phoneNum, setPhoneNum] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [payment, setPayment] = React.useState('');
+    const [resultMsg, setRusultMsg] = React.useState('');
     function getStepContent(step) {
         switch (step) {
             case 0:
@@ -71,6 +72,22 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                                     });
                                 } else {
                                     setOrderStatus(2);
+                                    // console.log(re.data.tasks);
+                                    // eslint-disable-next-line no-plusplus
+                                    for (let i = 0; i < re.data.tasks.length; i++) {
+                                        if (re.data.tasks[i].status !== 'COMPLETED') {
+                                            if (re.data.tasks[i].taskDefName.indexOf('Region') !== -1) {
+                                                setRusultMsg('您所在的地域不符合条件！');
+                                            } else if (re.data.tasks[i].taskDefName.indexOf('Profile') !== -1) {
+                                                setRusultMsg('您的手机号或者密码错误！');
+                                            } else if (re.data.tasks[i].taskDefName.indexOf('Credential') !== -1) {
+                                                setRusultMsg('您的身份证号错误！');
+                                            } else {
+                                                setRusultMsg('您不在购满人群范围内！');
+                                            }
+                                            break;
+                                        }
+                                    }
                                     entityApi.updateOrder({ oid: res.data.msg, workflowId: event.data, status: 2 }).then((r) => {
                                         console.log(r);
                                         socket.close();
@@ -136,12 +153,12 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                             orderStatus === 0 ? (
                                 <CircularProgress sx={{ ml: 32 }} />
                             ) : orderStatus === 1 ? (
-                                <Typography variant="h4" sx={{ ml: 27 }}>
+                                <Typography variant="h4" align="center">
                                     您的订单生成成功
                                 </Typography>
                             ) : (
-                                <Typography variant="h4" sx={{ ml: 27 }}>
-                                    您的订单生成失败
+                                <Typography variant="h4" align="center">
+                                    您的订单生成失败,{resultMsg}
                                 </Typography>
                             )
                         ) : (
