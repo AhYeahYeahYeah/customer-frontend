@@ -29,6 +29,7 @@ const NotificationSection = () => {
     const [text, setText] = useState('');
     const [sid, setSid] = useState('');
     const handleClose = () => {
+        setSid('');
         setOpen(false);
     };
     function handleTextChange(e) {
@@ -49,7 +50,7 @@ const NotificationSection = () => {
     function sendMessage() {
         if (text === null || text.trim() === '') return undefined;
         // ChatAPI.sendMessage(props.friendID, text);
-        setMessages((messages) => [...messages, { text: [text], flag: true }]);
+        setMessages((messages) => [...messages, { text: [[text, 0]], flag: true }]);
         const data = {
             version: '3.0',
             service_id: 'S67137',
@@ -60,22 +61,22 @@ const NotificationSection = () => {
         const robotApi = new RobotApi();
         robotApi.sendMsg(data).then((res) => {
             // console.log(res);
-            if (res.data.result.responses[0].actions[0].type === 'failure') CallBackMsg([res.data.result.responses[0].actions[0].say]);
+            if (res.data.result.responses[0].actions[0].type === 'failure') CallBackMsg([[res.data.result.responses[0].actions[0].say, 0]]);
             // else CallBackMsg(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word);
             else if (res.data.result.responses[0].actions[0].type === 'guide') {
                 // eslint-disable-next-line no-useless-concat
                 const list = [
-                    res.data.result.responses[0].actions[0].say,
-                    '1个月',
-                    '2个月',
-                    '3个月',
-                    '6个月',
-                    '12个月',
-                    '24个月',
-                    '36个月'
+                    [res.data.result.responses[0].actions[0].say, 0],
+                    ['1个月', 1],
+                    ['2个月', 1],
+                    ['3个月', 1],
+                    ['6个月', 1],
+                    ['12个月', 1],
+                    ['24个月', 1],
+                    ['36个月', 1]
                 ];
                 CallBackMsg(list);
-            } else CallBackMsg([res.data.result.responses[0].actions[0].say]);
+            } else CallBackMsg([[res.data.result.responses[0].actions[0].say, 0]]);
             setSid(res.data.result.session_id);
             scrollToBottom();
         });
@@ -89,7 +90,7 @@ const NotificationSection = () => {
     }
     useEffect(() => {
         if (open) {
-            setMessages((messages) => [...messages, { text: ['请问需要什么帮助呢'], flag: false }]);
+            setMessages((messages) => [...messages, { text: [['请问需要什么帮助呢', 0]], flag: false }]);
         }
     }, [open]);
     useEffect(() => {
@@ -152,7 +153,15 @@ const NotificationSection = () => {
                                     </Avatar>
                                 )}
                                 <Box sx={{ m: 1.5 }}>
-                                    <MessageBubble isFriend text={msg.text} />
+                                    <MessageBubble
+                                        isFriend
+                                        text={msg.text}
+                                        setMessages={setMessages}
+                                        sid={sid}
+                                        /* eslint-disable-next-line react/jsx-no-bind */
+                                        CallBack={CallBackMsg}
+                                        scrollToBottom={scrollToBottom}
+                                    />
                                 </Box>
                                 {msg.flag ? <Avatar src={JSON.parse(localStorage.getItem('customer')).avatar} /> : ''}
                             </ListItem>
