@@ -83,7 +83,7 @@ export default function BuyModel({ open, handleClose, buyProduct, profileFlag })
                                             } else if (re.data.tasks[i].taskDefName.indexOf('Credential') !== -1) {
                                                 setRusultMsg('您的身份证号错误！');
                                             } else {
-                                                setRusultMsg('您不在购满人群范围内！');
+                                                setRusultMsg('您不在购买人群范围内！');
                                             }
                                             break;
                                         }

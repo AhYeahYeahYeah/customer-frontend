@@ -6,10 +6,10 @@ import { Alert, CardHeader, Grid, Snackbar } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { ShoppingCart, StarOutlined } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { EntityApi } from '../../api/restful';
+import { ConductorApi, EntityApi } from '../../api/restful';
 import ComboBox from './ComboBox';
 import SearchProduct from './SearchProduct';
-import BuyModel from './BuyModel';
+import BuyModel from '../product/BuyModel';
 import AlertModel from './AlertModel';
 
 export default function Favorite() {
@@ -27,6 +27,7 @@ export default function Favorite() {
     const [starProduct, setStarProduct] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState('');
+    const [profileFlag, setProfileFlag] = useState(false);
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
@@ -126,26 +127,41 @@ export default function Favorite() {
     };
 
     const handleOpen = (value) => {
+        const conductor = new ConductorApi();
         const entityApi = new EntityApi(localStorage.getItem('customer_token'));
-        entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
-            if (
-                res.data[0].sid === '' ||
-                res.data[0].phoneNum === '' ||
-                res.data[0].address === '' ||
-                res.data[0].cardNum === '' ||
-                res.data[0].birthday === '' ||
-                res.data[0].sid === null ||
-                res.data[0].phoneNum === null ||
-                res.data[0].address === null ||
-                res.data[0].cardNum === null ||
-                res.data[0].birthday === null
-            ) {
-                setSnackbarMsg('请完善您的个人信息再进行购买');
-                setSnackbarOpen(true);
-            } else {
-                setBuyProduct(value);
-                setOpen(true);
-            }
+        // eslint-disable-next-line no-loop-func
+        entityApi.getProduct(value.pid).then((res) => {
+            entityApi.getWorkFlow(res.data[0].fid).then((rs) => {
+                conductor.getMetaDataWorkFlow(rs.data[0].name).then((data) => {
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < data.data.tasks.length; i++) {
+                        if (data.data.tasks[i].name.indexOf('Profile') !== -1) {
+                            setProfileFlag(true);
+                            break;
+                        }
+                    }
+                    entityApi.getCustomerProfile(JSON.parse(localStorage.getItem('customer')).cid).then((res) => {
+                        if (
+                            res.data[0].sid === '' ||
+                            res.data[0].phoneNum === '' ||
+                            res.data[0].address === '' ||
+                            res.data[0].cardNum === '' ||
+                            res.data[0].birthday === '' ||
+                            res.data[0].sid === null ||
+                            res.data[0].phoneNum === null ||
+                            res.data[0].address === null ||
+                            res.data[0].cardNum === null ||
+                            res.data[0].birthday === null
+                        ) {
+                            setSnackbarMsg('请完善您的个人信息再进行购买');
+                            setSnackbarOpen(true);
+                        } else {
+                            setBuyProduct(value);
+                            setOpen(true);
+                        }
+                    });
+                });
+            });
         });
     };
 
@@ -264,7 +280,7 @@ export default function Favorite() {
                 </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ mt: 0.3 }}>
-                <BuyModel open={open} handleClose={handleClose} buyProduct={buyProduct} />
+                <BuyModel open={open} handleClose={handleClose} buyProduct={buyProduct} profileFlag={profileFlag} />
                 {productsSort.map((product) => (
                     // Enterprise card is full width at sm breakpoint
                     <Grid item key={product.pid} md={3} sm={6} xs={12}>
